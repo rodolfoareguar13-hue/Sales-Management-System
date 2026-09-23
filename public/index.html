@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ventas - Pupusería</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Ventas - Pupusería</h1>
+            <nav>
+                <button class="nav-btn active" data-page="ventas">Ventas</button>
+                <button class="nav-btn" data-page="reportes">Reportes</button>
+                <button class="nav-btn" data-page="metas">Metas</button>
+                <button class="nav-btn" data-page="importacion">Importación</button>
+            </nav>
+        </header>
+
+        <!-- Página de Ventas -->
+        <div id="page-ventas" class="page active">
+            <h2>Registro de Venta</h2>
+            <div class="venta-form">
+                <div class="productos-section">
+                    <h3>Productos</h3>
+                    <div class="buscar-producto">
+                        <input type="text" id="buscar-producto" placeholder="Buscar producto..." autocomplete="off">
+                        <div id="sugerencias-productos" class="sugerencias"></div>
+                    </div>
+                    <div id="items-venta" class="items-venta">
+                        <div class="item-header">
+                            <span>Producto</span>
+                            <span>Cantidad</span>
+                            <span>Precio Unit.</span>
+                            <span>Subtotal</span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="total-section">
+                        <strong>Total: <span id="total-venta">₡0.00</span></strong>
+                    </div>
+                </div>
+                <div class="info-venta">
+                    <div class="form-group">
+                        <label>Método de Pago:</label>
+                        <select id="metodo-pago" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                            <option value="Simple Móvil">Simple Móvil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones (opcional):</label>
+                        <textarea id="observaciones" rows="3"></textarea>
+                    </div>
+                    <button id="btn-guardar-venta" class="btn-primary">Guardar Venta</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Reportes -->
+        <div id="page-reportes" class="page">
+            <h2>Reportes de Ventas</h2>
+            <div class="filtros">
+                <div class="form-group">
+                    <label>Fecha Inicio:</label>
+                    <input type="date" id="filtro-fecha-inicio">
+                </div>
+                <div class="form-group">
+                    <label>Fecha Fin:</label>
+                    <input type="date" id="filtro-fecha-fin">
+                </div>
+                <div class="form-group">
+                    <label>Método de Pago:</label>
+                    <select id="filtro-metodo-pago">
+                        <option value="">Todos</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Simple Móvil">Simple Móvil</option>
+                    </select>
+                </div>
+                <button id="btn-buscar" class="btn-primary">Buscar</button>
+                <button id="btn-exportar-pdf" class="btn-secondary">Exportar PDF</button>
+                <button id="btn-exportar-excel" class="btn-secondary">Exportar Excel</button>
+            </div>
+            <div class="estadisticas">
+                <div class="stat-card">
+                    <span class="stat-label">Total Vendido</span>
+                    <span class="stat-value" id="stat-total">₡0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Cantidad de Ventas</span>
+                    <span class="stat-value" id="stat-cantidad">0</span>
+                </div>
+            </div>
+            <div class="tabla-ventas">
+                <table id="tabla-reportes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha y Hora</th>
+                            <th>Total</th>
+                            <th>Método de Pago</th>
+                            <th>Items</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Página de Metas -->
+        <div id="page-metas" class="page">
+            <h2>Metas y Progreso</h2>
+            <div class="meta-section">
+                <div class="meta-info">
+                    <h3>Meta Semanal</h3>
+                    <div class="meta-editor">
+                        <label>Meta Semanal (₡):</label>
+                        <input type="number" id="meta-semanal" min="0" step="1000">
+                        <button id="btn-guardar-meta" class="btn-primary">Actualizar Meta</button>
+                    </div>
+                    <div class="progreso-meta">
+                        <div class="progreso-info">
+                            <div class="progreso-item">
+                                <span>Meta:</span>
+                                <strong id="meta-valor">₡0.00</strong>
+                            </div>
+                            <div class="progreso-item">
+                                <span>Vendido:</span>
+                                <strong id="meta-vendido">₡0.00</strong>
+                            </div>
+                            <div class="progreso-item">
+                                <span>Restante:</span>
+                                <strong id="meta-restante">₡0.00</strong>
+                            </div>
+                            <div class="progreso-item">
+                                <span>Porcentaje:</span>
+                                <strong id="meta-porcentaje">0%</strong>
+                            </div>
+                        </div>
+                        <div class="barra-progreso">
+                            <div class="barra-fill" id="barra-progreso-fill"></div>
+                        </div>
+                        <div class="semana-info">
+                            <span>Semana: <span id="semana-rango"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="graficos-section">
+                    <h3>Gráfico de Ventas Diarias</h3>
+                    <canvas id="grafico-ventas"></canvas>
+                </div>
+            </div>
+            <div class="acciones-meta">
+                <button id="btn-exportar-meta-pdf" class="btn-secondary">Exportar Reporte PDF</button>
+                <button id="btn-exportar-meta-excel" class="btn-secondary">Exportar Reporte Excel</button>
+            </div>
+        </div>
+
+        <!-- Página de Importación -->
+        <div id="page-importacion" class="page">
+            <h2>Importación de Ventas</h2>
+            <div class="importacion-form">
+                <div class="upload-section">
+                    <h3>Importar Ventas desde Excel</h3>
+                    <p>Sube un archivo Excel con las ventas que deseas importar al sistema.</p>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="excel-file" accept=".xlsx,.xls" style="display: none;">
+                        <button id="btn-select-file" class="btn-primary">Seleccionar Archivo Excel</button>
+                        <span id="file-name">Ningún archivo seleccionado</span>
+                    </div>
+                    
+                    <div class="formato-info">
+                        <h4>Formato del Archivo Excel:</h4>
+                        <ul>
+                            <li><strong>Columna A:</strong> ID (opcional, se ignora)</li>
+                            <li><strong>Columna B:</strong> Fecha y hora (ej: 22/03/2026 19:51:36)</li>
+                            <li><strong>Columna C:</strong> Total de la venta (ej: 12.850,00)</li>
+                            <li><strong>Columna D:</strong> Método de pago (Efectivo/Tarjeta/Simple Móvil)</li>
+                            <li><strong>Columna E:</strong> Items de la venta (ej: "Mixta x44, Cebada x2")</li>
+                            <li><strong>Columna F:</strong> Observaciones generales (ej: "sala de ventas")</li>
+                        </ul>
+                        <p><strong>Nota:</strong> El sistema extraerá automáticamente los productos de la columna 'Items' usando patrones como "Mixta x44" o "Six Pack x1". Las observaciones generales se guardarán por separado.</p>
+                    </div>
+                    
+                    <div class="import-actions">
+                        <button id="btn-preview-import" class="btn-secondary" disabled>Previsualizar Datos</button>
+                        <button id="btn-confirm-import" class="btn-primary" disabled>Confirmar Importación</button>
+                    </div>
+                </div>
+                
+                <div id="preview-section" class="preview-section" style="display: none;">
+                    <h3>Vista Previa de Datos</h3>
+                    <div class="preview-stats">
+                        <span>Ventas a importar: <strong id="preview-count">0</strong></span>
+                        <span>Total: <strong id="preview-total">₡0</strong></span>
+                    </div>
+                    <div class="preview-table">
+                        <table id="preview-table-content">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                    <th>Método</th>
+                                    <th>Productos</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="import-results" class="import-results" style="display: none;">
+                    <h3>Resultados de la Importación</h3>
+                    <div class="results-stats">
+                        <span class="success">Ventas importadas: <strong id="success-count">0</strong></span>
+                        <span class="error">Errores: <strong id="error-count">0</strong></span>
+                    </div>
+                    <div id="error-details" class="error-details"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
