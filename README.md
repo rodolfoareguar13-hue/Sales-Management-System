@@ -1,133 +1,199 @@
-# Sistema de Ventas - Pupusería Salvadoreña
+Sales Management System – Salvadoran Pupusería
 
-Sistema de registro de ventas rápido y eficiente para pupusería, con reportes, metas semanales y exportación a PDF/Excel.
+A fast, reliable, and efficient sales management system designed specifically for a Salvadoran pupusería. The system provides streamlined sales registration, comprehensive reporting, weekly sales targets, and PDF/Excel export capabilities.
 
-## Características
+Features
 
-- Registro rápido de ventas con autocompletar de productos
-- Base de datos SQLite local y confiable
-- Reportes de ventas con filtros por fecha y método de pago
-- Sistema de metas semanales con progreso visual
-- Gráficos de ventas diarias
-- Exportación a PDF y Excel
-- Interfaz web simple y funcional
-- Empaquetado como .exe para instalación fácil
+Fast sales entry with product autocomplete
 
-## Instalación y Uso
+Reliable local SQLite database
 
-### Desarrollo
+Sales reports with date and payment-method filters
 
-1. Instalar dependencias:
-```bash
+Weekly sales targets with visual progress tracking
+
+Daily sales charts
+
+PDF and Excel report exports
+
+Simple, user-friendly web interface
+
+Windows .exe installer for easy deployment
+
+Installation and Usage
+Development Environment
+
+Install the project dependencies:
+
 npm install
-```
 
-2. Ejecutar en modo desarrollo:
-```bash
+
+Start the application in development mode:
+
 npm start
-```
 
-### Generar .exe Instalable
+Building the Windows Installer
 
-Para crear el ejecutable instalable:
+To generate the Windows installer, run:
 
-```bash
 npm run build-win
-```
 
-El archivo .exe se generará en la carpeta `dist/`.
 
-## Estructura del Proyecto
+The resulting .exe installer will be generated in the dist/ directory.
 
-```
-├── main.js              # Proceso principal de Electron
-├── preload.js           # Script de preload
-├── package.json         # Configuración del proyecto
+Project Structure
+├── main.js                  # Electron main process
+├── preload.js               # Electron preload script
+├── package.json             # Project configuration
 ├── server/
-│   ├── database.js      # Configuración de SQLite
-│   ├── routes.js        # Rutas de la API
-│   ├── pdfGenerator.js  # Generador de PDFs
-│   └── excelGenerator.js # Generador de Excel
+│   ├── database.js          # SQLite database configuration
+│   ├── routes.js            # API routes
+│   ├── pdfGenerator.js      # PDF report generator
+│   └── excelGenerator.js    # Excel report generator
 ├── public/
-│   ├── index.html       # Interfaz principal
-│   ├── styles.css       # Estilos
-│   └── app.js           # Lógica del frontend
-└── data/                # Base de datos SQLite (se crea automáticamente)
-```
+│   ├── index.html            # Main user interface
+│   ├── styles.css            # Application styles
+│   └── app.js                # Frontend application logic
+└── data/                     # SQLite database (created automatically)
 
-## Funcionalidades
+Core Functionality
+Sales Registration
 
-### Registro de Ventas
-- Búsqueda rápida de productos con autocompletar
-- Agregar múltiples productos con cantidades
-- Métodos de pago: Efectivo, Tarjeta, Simple Móvil
-- Observaciones opcionales
+Quick product search with autocomplete
 
-### Reportes
-- Filtros por fecha y método de pago
-- Estadísticas de totales y cantidad de ventas
-- Exportación a PDF y Excel
+Add multiple products and quantities to a sale
 
-### Metas
-- Meta semanal configurable (por defecto ₡600,000)
-- Progreso visual con barra
-- Gráfico de ventas diarias de la semana
-- Exportación de reportes de meta
+Supported payment methods:
 
-## Base de Datos
+Cash
 
-La base de datos SQLite se crea automáticamente en `data/ventas.db` con las siguientes tablas:
+Credit/Debit Card
 
-- `productos`: Catálogo de productos
-- `ventas`: Registro de ventas
-- `venta_items`: Items de cada venta
-- `metas`: Configuración de metas semanales
+Simple Móvil
 
-## Notas
+Optional sales notes and observations
 
-- Los productos del menú se cargan automáticamente al iniciar por primera vez
-- La meta semanal se calcula de lunes a domingo
-- Todos los precios incluyen I.V.A.
+Sales Reports
 
-## Cómo generar el instalador (.exe) en Windows
+Filter reports by date range and payment method
 
-Para compilar `sqlite3` y crear el instalador necesitas las herramientas de compilación de Visual Studio. Sigue estos pasos:
+View total sales and transaction counts
 
-1. **Instalar Visual Studio Build Tools 2022**  
-   - Abre el *Visual Studio Installer* y selecciona **Visual Studio Build Tools 2022**.  
-   - Marca el *workload* **“Desarrollo para el escritorio con C++”**.  
-   - Asegúrate de que estén seleccionados los componentes:  
-     - *MSVC v143 - VS 2022 C++ x64/x86 build tools*  
-     - *Windows 11 SDK (10.0.22621)* o *Windows 10 SDK (10.0.19041)*  
-     - *Herramientas de CMake en C++ para Windows* (opcional pero recomendado)
+Export sales reports to PDF and Excel
 
-2. **Instalar Pip y Setuptools en Python (para node-gyp)**  
-   ```powershell
-   python -m ensurepip --upgrade
-   python -m pip install --upgrade pip setuptools
-   ```
+Weekly Sales Targets
 
-3. **Usar la consola de herramientas nativas**  
-   - Abre el acceso directo **“x64 Native Tools Command Prompt for VS 2022”** (mejor si es *Build Tools*).  
-   - En esa consola navega al proyecto:
-     ```cmd
-     cd C:\Users\pupus\Desktop\Pupuseria
-     ```
+Configurable weekly sales target
 
-4. **Forzar la recompilación de sqlite3**  
-   ```cmd
-   npm rebuild sqlite3
-   ```
+Default weekly target: ₡600,000
 
-5. **Generar el instalador**  
-   ```cmd
-   npm run build-win
-   ```
+Visual progress bar for target tracking
 
-6. **Solución de problemas comunes**  
-   - *“Cannot create symbolic link”*: ejecuta la consola como Administrador o habilita el “Modo desarrollador” en Windows.  
-   - *Errores de `distutils`*: asegúrate de haber instalado `pip` y `setuptools` en tu versión de Python.  
-   - *Errores de SDK*: confirma que al menos un Windows SDK esté marcado en el instalador de Visual Studio.
+Daily sales chart for the current week
 
-El instalador quedará disponible en la carpeta `dist/` con el nombre `Sistema de Ventas - Pupusería Setup 1.0.0.exe`.
+Exportable weekly target reports
 
+Database
+
+The SQLite database is automatically created at:
+
+data/ventas.db
+
+
+The database contains the following tables:
+
+productos – Product catalog
+
+ventas – Sales transactions
+
+venta_items – Individual items associated with each sale
+
+metas – Weekly sales target configuration
+
+Additional Notes
+
+The initial product catalog is automatically loaded when the application is launched for the first time.
+
+Weekly sales targets are calculated from Monday through Sunday.
+
+All product prices include VAT (I.V.A.).
+
+Building the Windows Installer
+
+To compile the native sqlite3 module and generate the Windows installer, the required Visual Studio C++ build tools must be installed.
+
+1. Install Visual Studio Build Tools 2022
+
+Open the Visual Studio Installer and install Visual Studio Build Tools 2022.
+
+Select the following workload:
+
+Desktop development with C++
+
+Make sure the following components are installed:
+
+MSVC v143 – VS 2022 C++ x64/x86 build tools
+
+Windows 11 SDK (10.0.22621) or Windows 10 SDK (10.0.19041)
+
+C++ CMake tools for Windows (optional, but recommended)
+
+2. Install Python Pip and Setuptools
+
+node-gyp requires Python and the appropriate build tooling. Run the following commands in PowerShell:
+
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip setuptools
+
+3. Use the Native Visual Studio Tools Command Prompt
+
+Open:
+
+x64 Native Tools Command Prompt for VS 2022
+
+The Build Tools version of the command prompt is recommended.
+
+Navigate to the project directory:
+
+cd C:\Users\pupus\Desktop\Pupuseria
+
+4. Rebuild the SQLite Module
+
+Force a native rebuild of the sqlite3 dependency:
+
+npm rebuild sqlite3
+
+5. Generate the Windows Installer
+
+Once the native dependencies have been successfully rebuilt, run:
+
+npm run build-win
+
+
+The installer will be generated in the dist/ directory.
+
+The expected installer filename is:
+
+Sistema de Ventas - Pupusería Setup 1.0.0.exe
+
+Troubleshooting
+"Cannot create symbolic link"
+
+Run the command prompt as Administrator, or enable Developer Mode in Windows.
+
+distutils Errors
+
+Verify that Python and its packaging tools are properly installed. Run:
+
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip setuptools
+
+Windows SDK Errors
+
+Open the Visual Studio Installer and confirm that at least one compatible Windows SDK is installed and selected under the C++ desktop development workload.
+
+Deployment
+
+After a successful build, the Windows installer will be available in the project's dist/ directory and can be distributed to the pupusería's Windows computers for installation.
+
+The application uses a local SQLite database, allowing sales data to be stored reliably on the local machine without requiring an external database server.
